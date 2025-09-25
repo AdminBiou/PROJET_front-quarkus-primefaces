@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Système Fenêtre Web</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #f9fafc);
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            background: linear-gradient(135deg, #3c3cc9, #6b74e6);
+            color: white;
+            padding: 22px;
+            margin: 0;
+            text-align: center;
+            font-size: 1.9em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px;
+            gap: 30px;
+        }
+
+        .left-panel, .right-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        }
+
+        .left-panel { flex: 1; }
+        .right-panel { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            width: 280px; 
+        }
+
+        /* === Input fields === */
+        .ui-inputfield {
+            border-radius: 8px !important;
+            padding: 8px !important;
+            font-size: 15px;
+        }
+
+        .my-heading-row { 
+            background: #f0f2f8; 
+            font-weight: bold; 
+            font-size: 1.1em;
+            padding: 10px; 
+            text-align: center; 
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* === Boutons === */
+        .operations-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 90px); 
+            grid-gap: 14px; 
+            justify-content: center; 
+        }
+
+        .big-buttons { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 14px; 
+            align-items: center; 
+            margin-top: 20px; 
+        }
+
+        .operations-grid p\:commandButton,
+        .big-buttons p\:commandButton {
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .operations-grid p\:commandButton { width: 90px; height: 55px; }
+        .big-buttons p\:commandButton { width: 200px; height: 55px; }
+
+        .operations-grid p\:commandButton:hover,
+        .big-buttons p\:commandButton:hover {
+            background: #3c3cc9 !important;
+            color: white !important;
+            transform: translateY(-3px);
+        }
+
+        /* === Table Historique === */
+        .historique-table {
+            margin-top: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .ui-datatable thead th {
+            background: #e6e8f5 !important;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .ui-datatable tbody td {
+            text-align: center;
+        }
+
+        /* === Boutons secondaires === */
+        .about-help-btns { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-top: 15px; 
+        }
+
+        .about-help-btns p\:commandButton { 
+            width: 120px; 
+            border-radius: 8px;
+        }
+
+        /* === Dialogues === */
+        .ui-dialog .ui-dialog-titlebar {
+            background: linear-gradient(135deg, #3c3cc9, #6b74e6) !important;
+            color: white !important;
+            font-weight: bold;
+        }
+    </style>
+</h:head>
+
+<h:body>
+<h2>🖥️ Système Fenêtre - Version Web</h2>
+
+<h:form id="calcForm">
+    <div class="container">
+
+        <!-- Colonne gauche -->
+        <div class="left-panel">
+            <p:panelGrid columns="2" styleClass="ui-fluid" columnClasses="label,value">
+                <p:row styleClass="my-heading-row">Paramètres de calcul</p:row>
+
+                <p:outputLabel for="a" value="a :" />
+                <p:inputText id="a" value="#{calculBean.a}" />
+
+                <p:outputLabel for="b" value="b :" />
+                <p:inputText id="b" value="#{calculBean.b}" />
+
+                <p:outputLabel for="c" value="c :" />
+                <p:inputText id="c" value="#{calculBean.c}" />
+
+                <p:outputLabel for="resultat" value="Résultat :" />
+                <h:panelGroup id="resultat">
+                    <h:outputText value="#{calculBean.resultat}" style="font-weight:bold; color:#3c3cc9"/>
+                </h:panelGroup>
+            </p:panelGrid>
+
+            <!-- Historique -->
+            <p:dataTable id="historique" value="#{calculBean.historique}" var="op" styleClass="historique-table" paginator="true" rows="5">
+                <p:column headerText="Date">
+                    <h:outputText value="#{op.createdAt}" />
+                </p:column>
+                <p:column headerText="Opération">
+                    <h:outputText value="#{op.type}" />
+                </p:column>
+                <p:column headerText="Entrée">
+                    <h:outputText value="#{op.input}" />
+                </p:column>
+                <p:column headerText="Résultat">
+                    <h:outputText value="#{op.result}" />
+                </p:column>
+            </p:dataTable>
+        </div>
+
+        <!-- Colonne droite -->
+        <div class="right-panel">
+            <div class="operations-grid">
+                <p:commandButton value="+" action="#{calculBean.calculer('add')}" update=":calcForm:resultat :calcForm:historique" />
+                <p:commandButton value="-" action="#{calculBean.calculer('sub')}" update=":calcForm:resultat :calcForm:historique" />
+                <p:commandButton value="*" action="#{calculBean.calculer('mul')}" update=":calcForm:resultat :calcForm:historique" />
+                <p:commandButton value="/" action="#{calculBean.calculer('div')}" update=":calcForm:resultat :calcForm:historique" />
+            </div>
+
+            <div class="big-buttons">
+                <p:commandButton value="Équation 1D" action="#{calculBean.calculer('eq1')}" update=":calcForm:resultat :calcForm:historique"/>
+                <p:commandButton value="Équation 2D" action="#{calculBean.calculer('eq2')}" update=":calcForm:resultat :calcForm:historique"/>
+                <p:commandButton value="Effacer" action="#{calculBean.effacer}" update="@form"/>
+
+                <div class="about-help-btns">
+                    <p:commandButton value="Aide" onclick="PF('dlgAide').show(); return false;"/>
+                    <p:commandButton value="À propos" onclick="PF('dlgAbout').show(); return false;"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</h:form>
+
+<!-- Fenêtres modales -->
+<p:dialog header="Aide" widgetVar="dlgAide" modal="true" closable="true" width="420">
+    <h:outputText value="ℹ️ Remplissez a, b, c puis choisissez l’opération ou la résolution d'équation."/>
+</p:dialog>
+
+<p:dialog header="À propos" widgetVar="dlgAbout" modal="true" closable="true" width="420">
+    <h:outputText value="🖥️ Système Fenêtre Web - Version 1.0 - Développé par MOBIO Patrick"/>
+</p:dialog>
+
+</h:body>
+</html>
