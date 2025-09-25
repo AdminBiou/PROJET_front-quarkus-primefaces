@@ -25,21 +25,21 @@ Il fournit une interface web permettant aux utilisateurs d’effectuer des opér
 ### 1️⃣ Diagramme de séquence - Interaction utilisateur
 Montre le flux entre l’utilisateur, l’interface PrimeFaces et le serveur Quarkus.
 
-![Diagramme séquence frontend](images/Diagramme_Sequence_Frontend.png)
+![Diagramme séquence frontend](images/Deploiement_Docker.png)
 
 ---
 
 ### 2️⃣ Diagramme d’architecture
 Représente l’interaction entre le frontend (PrimeFaces), le backend Quarkus et la base MySQL.
 
-![Architecture frontend-backend](images/Architecture_Frontend_Backend.png)
+![Architecture frontend-backend](images/Deploiement_Local.png)
 
 ---
 
 ### 3️⃣ Aperçu de l’interface
 Capture d’écran de l’application web.
 
-![Interface utilisateur](images/Interface_Frontend.png)
+![Interface utilisateur](images/Diagramme_Sequence_Global.png)
 
 ---
 
